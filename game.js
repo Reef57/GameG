@@ -3,6 +3,8 @@ var ctx = canvas.getContext('2d');
 document.addEventListener("keydown", keyDownHandler, false);
 document.addEventListener("keyup", keyUpHandler, false);
 
+var score = 0;
+
 var rightPressed = false;
 var leftPressed = false;
 
@@ -30,6 +32,12 @@ for(var i = 0; i < brickColumnCount; i++) {
   for(var j = 0; j < brickRowCount; j++) {
     bricks[i][j] = {x: 0, y: 0, status: 1};
   }
+}
+
+function drawScore() {
+  ctx.font = "16px Arial";
+  ctx.fillStyle = "#0095DD";
+  ctx.fillText("Score: " + score, 35, 22);
 }
 
 function drawBall() {
@@ -72,6 +80,7 @@ function draw() {
   drawBall();
   collisionDetect();
   drawPaddle();
+  drawScore();
 
   if(x + dx > canvas.width-ballRadius || x + dx < ballRadius) {
     dx = -dx;
@@ -112,6 +121,11 @@ function collisionDetect() {
                 if(x > a.x && x < a.x+brickWidth && y > a.y && y < a.y+brickHeight) {
                     dy = -dy;
                     a.status = 0;
+                    score++;
+                    if(score == brickRowCount*brickColumnCount) {
+                        alert("YOU WON, gratz");
+                        document.location.reload();
+                    }
                 }
             }
         }
